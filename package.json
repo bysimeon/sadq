@@ -1,0 +1,19 @@
+{
+  "name": "partywatcher",
+  "version": "1.0.0",
+  "description": "watch habitica party",
+  "main": "cron.js",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "fs": "^0.0.1-security",
+    "node-cron": "^2.0.3",
+    "request": "^2.88.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "bysimeon",
+  "license": "ISC"
+}

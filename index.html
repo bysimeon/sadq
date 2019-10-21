@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>sadq activity</title>
+    </head>
+
+    <body>
+        <div class="container">
+            <h1 class="title">super active daily quests</h1>
+            <div class="description">
+                list of member's most recent (approximate) spell cast for party.
+            </div>
+            <div class="member_list">
+
+            </div>
+        </div>
+    </body>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            
+        }
+        html {
+            font-size: calc(12px + .5vw) ;
+            font-family: "Helvetica";
+        }
+        body {
+            background: rgb(22, 22, 22);
+            color: white;
+        }
+        .container {
+            margin: 5vh auto;
+            padding: auto;
+            width: 80%;
+        }
+        .title {
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        .member_list {
+            line-height: 1.25em;;
+        }
+    </style>
+
+    <script>
+        async function loadActivity() {
+            const activityList = await fetch("./activityList.json")
+            const members = await activityList.json()
+            
+            console.log(members)
+            let unorderedList = document.createElement("ul")
+            Object.entries(members).forEach(member => {
+                let listElement = document.createElement("li")
+                let textNode = document.createTextNode(
+                    `${member[0]} last cast: ${member[1]}`
+                )
+                listElement.appendChild(textNode)
+                unorderedList.appendChild(listElement)
+            })
+
+            const membersList = document.querySelector(".member_list")
+            membersList.appendChild(unorderedList)
+        }
+
+        loadActivity()
+    </script>
+</html>
