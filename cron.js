@@ -1,10 +1,13 @@
+#!/usr/bin/env node
+
 const request = require("request")
 const cron = require("node-cron")
 const fs = require("fs")
 require("dotenv").config()
 let activityList = require("./activityList.json")
 
-const requestUrl = "https://habitica.com/api/v3/groups/" + process.env.GROUPID + "/chat"
+const requestUrl =
+    "https://habitica.com/api/v3/groups/" + process.env.GROUPID + "/chat"
 
 const chatRequest = {
     url: requestUrl,
@@ -32,9 +35,20 @@ function updateActivity(error, response, body) {
                     time.getHours() +
                     ":" +
                     time.getMinutes()
-                activityList[caster] = now
+                activityList.members[caster] = now
             }
         })
+        const time = new Date(Date.now())
+        const now =
+            time.getMonth() +
+            1 +
+            "/" +
+            time.getDate() +
+            " " +
+            time.getHours() +
+            ":" +
+            time.getMinutes()
+        activityList["time"] = now
     }
 
     fs.writeFile(

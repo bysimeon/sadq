@@ -12,19 +12,17 @@
             <div class="description">
                 list of member's most recent (approximate) spell cast for party.
             </div>
-            <div class="member_list">
-
-            </div>
+            <div class="member_list"></div>
+            <div class="last_update"></div>
         </div>
     </body>
 
     <style>
         * {
             box-sizing: border-box;
-            
         }
         html {
-            font-size: calc(12px + .5vw) ;
+            font-size: calc(12px + 0.5vw);
             font-family: "Helvetica";
         }
         body {
@@ -41,16 +39,16 @@
             font-size: 1.5rem;
         }
         .member_list {
-            line-height: 1.25em;;
+            line-height: 1.25em;
         }
     </style>
 
     <script>
         async function loadActivity() {
             const activityList = await fetch("./activityList.json")
-            const members = await activityList.json()
-            
-            console.log(members)
+            const data = await activityList.json()
+            const members = data.members
+            const time = data.time
             let unorderedList = document.createElement("ul")
             Object.entries(members).forEach(member => {
                 let listElement = document.createElement("li")
@@ -63,6 +61,10 @@
 
             const membersList = document.querySelector(".member_list")
             membersList.appendChild(unorderedList)
+
+            const lastUpdate = document.querySelector(".last_update")
+            const updateTime = document.createTextNode(`last updated: ${time}`)
+            lastUpdate.appendChild(updateTime)
         }
 
         loadActivity()
