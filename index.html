@@ -53,7 +53,7 @@
             Object.entries(members).forEach(member => {
                 let listElement = document.createElement("li")
                 let textNode = document.createTextNode(
-                    `${member[0]} last cast: ${member[1]}`
+                    `${member[0]} last cast: ${member[1].time}`
                 )
                 listElement.appendChild(textNode)
                 unorderedList.appendChild(listElement)
