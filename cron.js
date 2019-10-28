@@ -37,11 +37,9 @@ function updateMembers(error, response, body) {
         })
         Object.entries(activityList.members).forEach(member => {
             if (memberList[member[0]]) {
-                console.log(`${member[0]} is in party`)
+                // do nothing
             } else {
-                console.log(`${member[0]} is NOT in party`)
                 delete activityList.members[member[0]]
-                console.log(activityList)
             }
         })
     }
@@ -68,30 +66,12 @@ function updateActivity(error, response, body) {
                     (message[1].text.indexOf("casts") - 2)
                 )
                 
-                const time = new Date(message[1].timestamp)
-                const now =
-                    time.getMonth() +
-                    1 +
-                    "/" +
-                    time.getDate() +
-                    " " +
-                    time.getHours() +
-                    ":" +
-                    time.getMinutes()
-                activityList.members[caster] = { time: now, id: message[1].id }
+                const time = message[1].timestamp
+                activityList.members[caster] = { time: time, id: message[1].id }
             }
         })
-        const time = new Date(Date.now())
-        const now =
-            time.getMonth() +
-            1 +
-            "/" +
-            time.getDate() +
-            " " +
-            time.getHours() +
-            ":" +
-            time.getMinutes()
-        activityList["time"] = now
+        const time = new Date(Date.now()).toString()
+        activityList["time"] = time
     }
 
     request(membersRequest, updateMembers)

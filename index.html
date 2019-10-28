@@ -3,12 +3,12 @@
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <title>sadq activity</title>
+        <title>Super Active Daily Quests</title>
     </head>
 
     <body>
         <div class="container">
-            <h1 class="title">super active daily quests</h1>
+            <h1 class="title">Super Active Daily Quests</h1>
             <div class="description">
                 list of member's most recent (approximate) spell cast for party.
             </div>
@@ -26,8 +26,7 @@
             font-family: "Helvetica";
         }
         body {
-            background: rgb(22, 22, 22);
-            color: white;
+            background: white;
         }
         .container {
             margin: 5vh auto;
@@ -38,8 +37,21 @@
             font-weight: bold;
             font-size: 1.5rem;
         }
-        .member_list {
-            line-height: 1.25em;
+        .grid {
+            margin: 2rem 0;
+            display: grid;
+            border-top: 2px solid #000;
+            border-left: 2px solid #000;
+            grid-template-columns: repeat(3, 1fr);
+        }
+        .grid__element {
+            border-right: 2px solid #000;
+            border-bottom: 2px solid #000;
+            padding: 1rem;
+        }
+        .grid__element--title {
+            background: black;
+            color: white;
         }
     </style>
 
@@ -49,18 +61,41 @@
             const data = await activityList.json()
             const members = data.members
             const time = data.time
+            const dates = {}
             let unorderedList = document.createElement("ul")
             Object.entries(members).forEach(member => {
-                let listElement = document.createElement("li")
-                let textNode = document.createTextNode(
-                    `${member[0]} last cast: ${member[1].time}`
-                )
-                listElement.appendChild(textNode)
-                unorderedList.appendChild(listElement)
+                let convertedTime = new Date(member[1].time)
+                let dateKey = convertedTime.getMonth().toString() +"/"+ convertedTime.getDate().toString()
+                if (dates[dateKey] === undefined) {
+                    dates[dateKey] = [member[0]]
+                } else {
+                    dates[dateKey] = [...dates[dateKey], member[0]]
+                }
             })
 
+            console.log(dates)
+            let grid = document.createElement("div")
+            Object.entries(dates).map(date => {
+                
+                grid.className = "grid"
+
+                let gridDate = document.createElement("div")
+                gridDate.classList = ["grid__element grid__element--title"]
+
+                let textNode = document.createTextNode(`${date[1].length} casts on ${date[0]}`)
+                gridDate.appendChild(textNode)
+                grid.appendChild(gridDate)
+                date[1].sort().forEach(user => {
+                    let gridElement = document.createElement("div")
+                    gridElement.classList = ["grid__element"]
+
+                    let username = document.createTextNode(user)
+                    gridElement.appendChild(username)
+                    grid.appendChild(gridElement)
+                })
+            })
             const membersList = document.querySelector(".member_list")
-            membersList.appendChild(unorderedList)
+            membersList.appendChild(grid)
 
             const lastUpdate = document.querySelector(".last_update")
             const updateTime = document.createTextNode(`last updated: ${time}`)
