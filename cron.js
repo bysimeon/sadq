@@ -37,11 +37,24 @@ function updateMembers(error, response, body) {
         })
         Object.entries(activityList.members).forEach(member => {
             if (memberList[member[0]]) {
+                console.log(`${member[0]} is in party`)
             } else {
+                console.log(`${member[0]} is NOT in party`)
                 delete activityList.members[member[0]]
+                console.log(activityList)
             }
         })
     }
+    fs.writeFile(
+        "./activityList.json",
+        JSON.stringify(activityList, null, 4),
+        err => {
+            if (err) throw err
+
+            // success case, the file was saved
+            console.log("activityList.json has been saved")
+        }
+    )
 }
 
 function updateActivity(error, response, body) {
@@ -81,20 +94,10 @@ function updateActivity(error, response, body) {
         activityList["time"] = now
     }
 
-    fs.writeFile(
-        "./activityList.json",
-        JSON.stringify(activityList, null, 4),
-        err => {
-            if (err) throw err
-
-            // success case, the file was saved
-            console.log("activityList.json has been saved")
-        }
-    )
+    request(membersRequest, updateMembers)
 }
 
 request(chatRequest, updateActivity)
-request(membersRequest, updateMembers)
 
 cron.schedule("0,30 0-23 * * *", () => {
     request(chatRequest, updateActivity)
