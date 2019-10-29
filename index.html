@@ -65,7 +65,7 @@
             let unorderedList = document.createElement("ul")
             Object.entries(members).forEach(member => {
                 let convertedTime = new Date(member[1].time)
-                let dateKey = convertedTime.getMonth().toString() +"/"+ convertedTime.getDate().toString()
+                let dateKey = (convertedTime.getMonth() + 1).toString() +"/"+ convertedTime.getDate().toString()
                 if (dates[dateKey] === undefined) {
                     dates[dateKey] = [member[0]]
                 } else {
