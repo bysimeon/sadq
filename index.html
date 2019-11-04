@@ -77,8 +77,8 @@
       });
 
       console.log(dates);
-      let grid = document.createElement("div");
       Object.entries(dates).map(date => {
+        let grid = document.createElement("div");
         grid.className = "grid";
 
         let gridDate = document.createElement("div");
@@ -97,6 +97,8 @@
           gridElement.appendChild(username);
           grid.appendChild(gridElement);
         });
+        const membersList = document.querySelector(".member_list");
+        membersList.appendChild(grid);
       });
       const membersList = document.querySelector(".member_list");
       membersList.appendChild(grid);
