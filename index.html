@@ -63,7 +63,10 @@
       const time = data.time;
       const dates = {};
       let unorderedList = document.createElement("ul");
-      Object.entries(members).forEach(member => {
+      const sortedMembers =  Object.entries(members).sort((a, b) => {
+        return b[1].time - a[1].time
+      })
+      sortedMembers.forEach(member => {
         let convertedTime = new Date(member[1].time);
         let dateKey =
           (convertedTime.getMonth() + 1).toString() +
