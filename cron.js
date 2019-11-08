@@ -76,6 +76,6 @@ function updateActivity(error, response, body) {
 
 request(chatRequest, updateActivity);
 
-cron.schedule("0,30 0-23 * * *", () => {
+cron.schedule("* * * * *", () => {
   request(chatRequest, updateActivity);
 });

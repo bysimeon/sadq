@@ -79,6 +79,12 @@
         }
       });
 
+      const lastUpdate = document.querySelector(".last_update");
+      const updateTime = document.createTextNode(`last updated: ${time}`);
+      lastUpdate.appendChild(updateTime);
+
+      document.querySelector(".container").appendChild(updateTime);
+
       console.log(dates);
       Object.entries(dates).map(date => {
         let grid = document.createElement("div");
@@ -103,12 +109,6 @@
         const membersList = document.querySelector(".member_list");
         membersList.appendChild(grid);
       });
-      const membersList = document.querySelector(".member_list");
-      membersList.appendChild(grid);
-
-      const lastUpdate = document.querySelector(".last_update");
-      const updateTime = document.createTextNode(`last updated: ${time}`);
-      lastUpdate.appendChild(updateTime);
     }
 
     loadActivity();
