@@ -68,11 +68,11 @@
         var hours = Math.floor((milliseconds % 86400000) / 3600000) // hours
         var minutes = Math.round(((milliseconds % 86400000) % 3600000) / 60000) // minutes
         if (days > 0) {
-          if (days > 1) {
-            return days.toString() + " days ago"
-          } else {
-            return days.toString() + " day ago"
-          }
+          // if (days > 1) {
+          //   return days.toString() + " days ago"
+          // } else {
+          //   return days.toString() + " day ago"
+          // }
         } else if (hours > 0) {
           if (hours > 1) {
             return hours.toString() + " hours ago"
@@ -95,10 +95,16 @@
       const members = data.members;
       const time = data.time;
       const dates = {};
+
       let unorderedList = document.createElement("ul");
+
+
       const sortedMembers =  Object.entries(members).sort((a, b) => {
         return b[1].time - a[1].time
       })
+
+      console.log(sortedMembers)
+
       sortedMembers.forEach(member => {
         let convertedTime = new Date(member[1].time);
         let dateKey =
@@ -106,7 +112,7 @@
           "/" +
           convertedTime.getDate().toString();
         if (dates[dateKey] === undefined) {
-          dates[dateKey] = [member[0]];
+          dates[dateKey] = [[member[0], member[1].time]];
         } else {
           dates[dateKey] = [...dates[dateKey], [member[0], member[1].time]];
         }
@@ -131,7 +137,7 @@
         );
         gridDate.appendChild(textNode);
         grid.appendChild(gridDate);
-        date[1].sort().forEach(user => {
+        date[1].forEach(user => {
           let gridElement = document.createElement("div");
           gridElement.classList = ["grid__element"];
 
