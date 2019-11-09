@@ -60,7 +60,7 @@
 
   <script>
 
-    function unixTimestamp(t) {
+    function toRelativeTime(t) {
         var dt = new Date(t * 1)
         var nd = new Date()
         var milliseconds = nd.getTime() - dt.getTime()
@@ -92,44 +92,32 @@
         return output
       }
 
-
     async function loadActivity() {
       const activityList = await fetch("./activityList.json");
       const data = await activityList.json();
       const members = data.members;
-      const time = data.time;
       const dates = {};
 
-      let unorderedList = document.createElement("ul");
-
-
-      const sortedMembers =  Object.entries(members).sort((a, b) => {
+      const sortedMembers = Object.entries(members).sort((a, b) => {
         return b[1].time - a[1].time
       })
 
-      console.log(sortedMembers)
-
       sortedMembers.forEach(member => {
-        let convertedTime = new Date(member[1].time);
-        let dateKey =
-          (convertedTime.getMonth() + 1).toString() +
-          "/" +
-          convertedTime.getDate().toString();
+        const convertedTime = new Date(member[1].time);
+        const dateKey = (convertedTime.getMonth() + 1).toString() + "/" + convertedTime.getDate().toString();
+
         if (dates[dateKey] === undefined) {
           dates[dateKey] = [[member[0], member[1].time]];
         } else {
           dates[dateKey] = [...dates[dateKey], [member[0], member[1].time]];
         }
       });
+      const membersList = document.querySelector(".member_list");
+      console.log(`${membersList.children.length} & ${Object.entries(dates).length}`)
 
-      const lastUpdate = document.querySelector(".last_update");
-      const updateTime = document.createTextNode(`last updated: ${time}`);
-      lastUpdate.appendChild(updateTime);
-
-      document.querySelector(".container").appendChild(updateTime);
-
-      console.log(dates);
       Object.entries(dates).map(date => {
+
+        membersList.children.length >= Object.entries(dates).length ? membersList.removeChild(membersList.childNodes[1]) : console.log("nothing"); 
         let grid = document.createElement("div");
         grid.className = "grid";
 
@@ -148,17 +136,19 @@
           let username = document.createTextNode(user[0]);
           let timeSpan = document.createElement("span")
           timeSpan.className="align-right";
-          let relativeTime = document.createTextNode(unixTimestamp(user[1]))
+          let relativeTime = document.createTextNode(toRelativeTime(user[1]))
           gridElement.appendChild(username);
           timeSpan.appendChild(relativeTime);
           gridElement.appendChild(timeSpan)
           grid.appendChild(gridElement);
         });
-        const membersList = document.querySelector(".member_list");
+  
         membersList.appendChild(grid);
       });
     }
 
+    
     loadActivity();
+    setInterval(loadActivity, 60000)
   </script>
 </html>
