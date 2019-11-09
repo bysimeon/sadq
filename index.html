@@ -53,9 +53,42 @@
       background: black;
       color: white;
     }
+    .align-right {
+      float: right;
+    }
   </style>
 
   <script>
+
+    function unixTimestamp(t) {
+        var dt = new Date(t * 1)
+        var nd = new Date()
+        var milliseconds = nd.getTime() - dt.getTime()
+        var days = Math.floor(milliseconds / 86400000) // days
+        var hours = Math.floor((milliseconds % 86400000) / 3600000) // hours
+        var minutes = Math.round(((milliseconds % 86400000) % 3600000) / 60000) // minutes
+        if (days > 0) {
+          if (days > 1) {
+            return days.toString() + " days ago"
+          } else {
+            return days.toString() + " day ago"
+          }
+        } else if (hours > 0) {
+          if (hours > 1) {
+            return hours.toString() + " hours ago"
+          } else {
+            return hours.toString() + " hour ago"
+          }
+        } else {
+          if (minutes > 1) {
+            return minutes.toString() + " mins ago"
+          } else {
+            return minutes.toString() + " min ago"
+          }
+        }
+      }
+
+
     async function loadActivity() {
       const activityList = await fetch("./activityList.json");
       const data = await activityList.json();
@@ -75,7 +108,7 @@
         if (dates[dateKey] === undefined) {
           dates[dateKey] = [member[0]];
         } else {
-          dates[dateKey] = [...dates[dateKey], member[0]];
+          dates[dateKey] = [...dates[dateKey], [member[0], member[1].time]];
         }
       });
 
@@ -102,8 +135,13 @@
           let gridElement = document.createElement("div");
           gridElement.classList = ["grid__element"];
 
-          let username = document.createTextNode(user);
+          let username = document.createTextNode(user[0]);
+          let timeSpan = document.createElement("span")
+          timeSpan.className="align-right";
+          let relativeTime = document.createTextNode(unixTimestamp(user[1]))
           gridElement.appendChild(username);
+          timeSpan.appendChild(relativeTime);
+          gridElement.appendChild(timeSpan)
           grid.appendChild(gridElement);
         });
         const membersList = document.querySelector(".member_list");
