@@ -39,7 +39,7 @@ function updateMembers(error, response, body) {
       if (memberList[member[0]]) {
         // do nothing
       } else {
-        delete activityList.members[member[0]];
+        delete activityList.members[member];
       }
     });
   }
@@ -47,10 +47,7 @@ function updateMembers(error, response, body) {
     "./activityList.json",
     JSON.stringify(activityList, null, 4),
     err => {
-      if (err) throw err;
-
-      // success case, the file was saved
-      console.log("activityList.json has been saved");
+      if (err) throw err; 
     }
   );
 }
