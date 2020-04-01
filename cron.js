@@ -31,15 +31,14 @@ const membersRequest = {
 
 function updateMembers(error, response, body) {
   if (!error && response.statusCode == 200) {
-    const list = Object.entries(JSON.parse(body).data);
-    list.forEach(member => {
+    const memList = Object.entries(JSON.parse(body).data);
+    memList.forEach(member => {
       memberList[member[1].profile.name] = member[1].id;
     });
     Object.entries(activityList.members).forEach(member => {
       if (memberList[member[0]]) {
-        // do nothing
       } else {
-        delete activityList.members[member];
+        delete activityList.members[member[0]];
       }
     });
   }
