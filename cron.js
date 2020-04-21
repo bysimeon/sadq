@@ -4,6 +4,7 @@ const request = require("request");
 const cron = require("node-cron");
 const fs = require("fs");
 require("dotenv").config();
+
 let activityList = require("./activityList.json");
 let memberList = {};
 
@@ -29,26 +30,34 @@ const membersRequest = {
   }
 };
 
-function updateMembers(error, response, body) {
-  if (!error && response.statusCode == 200) {
-    const memList = Object.entries(JSON.parse(body).data);
-    memList.forEach(member => {
-      memberList[member[1].profile.name] = member[1].id;
-    });
-    Object.entries(activityList.members).forEach(member => {
-      if (memberList[member[0]]) {
-      } else {
-        delete activityList.members[member[0]];
-      }
-    });
-  }
+function updateJSON() {
   fs.writeFile(
     "./activityList.json",
     JSON.stringify(activityList, null, 4),
     err => {
-      if (err) throw err; 
+      if (err) throw err;
     }
   );
+}
+
+function updateMembers(error, response, body) {
+  if (!error && response.statusCode == 200) {
+    const memList = Object.entries(JSON.parse(body).data);
+
+    memList.forEach(member => {
+      memberList[member[1].profile.name] = member[1].id;
+    });
+
+    Object.entries(activityList.members).forEach(member => {
+      if (memberList[member[0]]) {
+        console.log(`${member[0]} is in the party`);
+      } else {
+        console.log(`${member[0]} is not in the party anymore`);
+        delete activityList.members[member[0]];
+      }
+    });
+    updateJSON();
+  }
 }
 
 function updateActivity(error, response, body) {
